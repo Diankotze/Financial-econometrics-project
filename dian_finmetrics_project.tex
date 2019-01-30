@@ -1,0 +1,753 @@
+\documentclass[11pt,preprint, authoryear]{elsarticle}
+
+\usepackage{lmodern}
+%%%% My spacing
+\usepackage{setspace}
+\setstretch{1.2}
+\DeclareMathSizes{12}{14}{10}{10}
+
+% Wrap around which gives all figures included the [H] command, or places it "here". This can be tedious to code in Rmarkdown.
+\usepackage{float}
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+    \expandafter\origfigure\expandafter[H]
+} {
+    \endorigfigure
+}
+
+\let\origtable\table
+\let\endorigtable\endtable
+\renewenvironment{table}[1][2] {
+    \expandafter\origtable\expandafter[H]
+} {
+    \endorigtable
+}
+
+
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+
+\usepackage{amssymb, amsmath, amsthm, amsfonts}
+
+\def\bibsection{\section*{References}} %%% Make "References" appear before bibliography
+
+
+\usepackage[round]{natbib}
+\bibliographystyle{plainnat}
+
+\usepackage{longtable}
+\usepackage[margin=2cm,bottom=2cm,top=2.5cm, includefoot]{geometry}
+\usepackage{fancyhdr}
+\usepackage[bottom, hang, flushmargin]{footmisc}
+\usepackage{graphicx}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{1.3ex plus 0.5ex minus 0.3ex}
+\usepackage{textcomp}
+\renewcommand{\headrulewidth}{0.2pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
+\usepackage{array}
+\newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
+
+%%%%  Remove the "preprint submitted to" part. Don't worry about this either, it just looks better without it:
+\makeatletter
+\def\ps@pprintTitle{%
+  \let\@oddhead\@empty
+  \let\@evenhead\@empty
+  \let\@oddfoot\@empty
+  \let\@evenfoot\@oddfoot
+}
+\makeatother
+
+ \def\tightlist{} % This allows for subbullets!
+
+\usepackage{hyperref}
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=blue,
+            pdfborder={0 0 0}}
+
+
+% The following packages allow huxtable to work:
+\usepackage{siunitx}
+\usepackage{multirow}
+\usepackage{hhline}
+\usepackage{calc}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{colortbl}
+
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{5}
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+%%% Include extra packages specified by user
+% Insert custom packages here as follows
+% \usepackage{tikz}
+
+%%% Hard setting column skips for reports - this ensures greater consistency and control over the length settings in the document.
+%% page layout
+%% paragraphs
+\setlength{\baselineskip}{12pt plus 0pt minus 0pt}
+\setlength{\parskip}{12pt plus 0pt minus 0pt}
+\setlength{\parindent}{0pt plus 0pt minus 0pt}
+%% floats
+\setlength{\floatsep}{12pt plus 0 pt minus 0pt}
+\setlength{\textfloatsep}{20pt plus 0pt minus 0pt}
+\setlength{\intextsep}{14pt plus 0pt minus 0pt}
+\setlength{\dbltextfloatsep}{20pt plus 0pt minus 0pt}
+\setlength{\dblfloatsep}{14pt plus 0pt minus 0pt}
+%% maths
+\setlength{\abovedisplayskip}{12pt plus 0pt minus 0pt}
+\setlength{\belowdisplayskip}{12pt plus 0pt minus 0pt}
+%% lists
+\setlength{\topsep}{10pt plus 0pt minus 0pt}
+\setlength{\partopsep}{3pt plus 0pt minus 0pt}
+\setlength{\itemsep}{5pt plus 0pt minus 0pt}
+\setlength{\labelsep}{8mm plus 0mm minus 0mm}
+\setlength{\parsep}{\the\parskip}
+\setlength{\listparindent}{\the\parindent}
+%% verbatim
+\setlength{\fboxsep}{5pt plus 0pt minus 0pt}
+
+
+
+\begin{document}
+
+\begin{frontmatter}  %
+
+\title{Correlation between bond returns' in developed economies: Evidence from
+6 developed countries}
+
+% Set to FALSE if wanting to remove title (for submission)
+
+
+
+
+\author[Add1]{Dian Kotze}
+\ead{kotzedian11@gmail.com}
+
+
+
+
+
+\address[Add1]{Stellenbosch University, Stellenbosch, South Africa}
+
+
+\begin{abstract}
+\small{
+This paper will compare the changing time-varying correlations of 6
+developed countries' 10-year bond returns over two time periods. The
+changing levels of time-varying correlations between the 10-year bond
+yields of Australia, Canada, Korea, New Zealand, the UK and the US will
+be analysed and compared. The study looks at the period prior to the
+global financial crisis and the period post-crisis. The co-movement
+between the bond markets is of particular interest to investors who seek
+to diversify their portfolios. Whilst many multi-variate models are
+available, this paper applies the Dynamic Conditional Correlation (DCC)
+Multivariate Generalized Autoregressive Conditional Heteroskedasticity
+(MV-GARCH) modelling technique to estimate time varying conditional
+correlations. This will allow for the comparison of the returns of these
+bonds and how the correlation changed post global financial crisis. The
+paper finds high correlation between all the country pairs, in excess of
+60 and 50 percent of the pre-crisis and post-crisis periods
+respectively. The only exception being Korea, whose correlation with all
+countries is low, but increases in the period after the global financial
+crisis. This portfolio offers little, if any diversification potential
+and is therefore not a good portfolio to hold in isolation.
+}
+\end{abstract}
+
+\vspace{1cm}
+
+\begin{keyword}
+\footnotesize{
+Multivariate GARCH \sep DCC \sep Bonds \sep Developed economies \\ \vspace{0.3cm}
+\textit{JEL classification} L250 \sep L100
+}
+\end{keyword}
+\vspace{0.5cm}
+\end{frontmatter}
+
+
+
+%________________________
+% Header and Footers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{fancy}
+\chead{}
+\rhead{Financial Econometrics 871}
+\lfoot{}
+\rfoot{\footnotesize Page \thepage\\}
+\lhead{}
+%\rfoot{\footnotesize Page \thepage\ } % "e.g. Page 2"
+\cfoot{}
+
+%\setlength\headheight{30pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%________________________
+
+\headsep 35pt % So that header does not go over title
+
+
+
+
+\section{\texorpdfstring{Introduction
+\label{Introduction}}{Introduction }}\label{introduction}
+
+The global financial markets are very turbulent even at the best of
+times. Bonds offer a safer alternative to stocks and equities,
+naturally, with a significantly lower return. Intuitively, the greater
+the correlation or co-movement between the returns of the bonds, the
+less diversification potential. Therefore, it is important to identify
+the correlation between the bonds returns, in order to generate a
+portfolio which could potentially provide good returns while minimising
+downside risk. Ideally, correlation between the assets should be
+realtively low. This enables spreading of risk of the portfolio. The
+main focus, however, is the correlation of the bond markets,
+particularly developed economies' bond returns. The correlation between
+developed economies' bond returns is expected to be high, given the
+global intergration of the financial markets and similar financial
+market conditions (Nico Katzke
+\protect\hyperlink{ref-katzke2013}{2013}). The paper will investigate
+and add inights to correlation amongst developed economies' bond
+markets.
+
+This paper aims to study the correlation between the weekly returns of
+the 6 countries' 10-year bonds. Studying the periods before and after
+the global financial crisis will enable comaparison across periods to
+identify effects and changes. This will also demonstrate the need for
+diversification in a portfolio, which can reduce the risk of losses. The
+paper will begin with a brief introduction to bonds and correlation in
+the bonds market in developed economies. This will be followed by a
+description of the data and the required transformations. The
+methodology section will provide insight to the approach taken to obtain
+the correlations. The results of the findings will then be reported and
+will be followed by concluding remarks.
+
+\section{\texorpdfstring{Literature review and rationale
+\label{lit_review}}{Literature review and rationale }}\label{literature-review-and-rationale}
+
+Bonds, in the simplest of terms, represents a debt obligation.
+Effectively, the money that is received by the person/entity that issues
+a bond, is a loan. Lenders require an incentive to provide their money
+as a source of financing. The incentive comes in the form of interest
+that is paid on these bonds, which ultimately attracts investors and is
+referred to as the yield. Bonds offer investors a safe alternative to
+stocks (equity), whose repayment is based on profitability (Fama and
+French \protect\hyperlink{ref-FRENCH}{1989}). Whilst potential returns
+are far greater than that of bonds, the potential losses in the case of
+stocks can be far more severe. Essentially, bonds provide a low risk
+alternative to investors who do not have an appetite for risk.
+
+According to Cappiello, Engle, and Sheppard
+(\protect\hyperlink{ref-cappiello2006}{2006}), portfolio management
+requires two broad strategies. Firstly, to invest in different asset
+classes which have little to negative correlation. Secondly, investing
+in the same or similar asset markets, while diversifying through
+investing in multiple international markets. This paper only considers
+the second stratgey, and is secondary to the main objective of
+identyfing correlation between the developed economies bond returns. Now
+that a brief understanding of what bonds are and the use of
+diversification, lets gain an understanding of the correlation between
+bond markets in developed economies.
+
+Developed economies in general, do display relatively high correlation
+with other developed economies, due in part, according to Barr and
+Priestley (\protect\hyperlink{ref-barr2004}{2004}) to the growing
+integration of the global financial markets. Additionally, the ease of
+access to information in the 21st century, which means investors are
+able to make real-time decisions which results in partially coordinated
+actions (Kumar and Okimoto \protect\hyperlink{ref-kumar2011}{2011}).
+Barr and Priestley (\protect\hyperlink{ref-barr2004}{2004}) finds
+evidence of high correlation between the Canadian and US bond markets
+and also finds correlation (although to a lesser degree) between the US
+and UK bond markets. Moroever, Davies
+(\protect\hyperlink{ref-davies2007}{2007}) notes in a study including 6
+bond markets, that the US, UK and Canadian bond markets share a common
+trend, subject to structural change. Davies
+(\protect\hyperlink{ref-davies2007}{2007}) also finds these results for
+some of the countries which are not included in this study and finds
+support for the growing integration of the international bond market.
+Lucey and Steeley (\protect\hyperlink{ref-lucey2006}{2006}) notes that
+previous studies on the correlation of international bond markets are
+few but increasing. Not many studies have included countries selected in
+this study, as a result, this paper will add insights regarding the
+correlation amongst developed countries.
+
+This study aims to provide additional insights to the literature
+regarding the correlation of the bond market, specifically that of
+developed economies. While methods such as ADCC, and EWMA to name just
+two of a number of models that can be used to model the conditional
+time-varying variance-covariance are available, this paper, due to time
+constraints will only discuss the DCC-GARCH methodology. This will be
+used to briefly note whether this would be a good portfolio for an
+investor to hold and demonstrate the need for diversification.
+
+\section{\texorpdfstring{Data \label{data}}{Data }}\label{data}
+
+The data used in the paper is obtained from the Bloomberg terminals,
+extracting the weekly returns of the 10-year bonds of 6 countries. The
+countries included in the study are Australia (AUS), Canada, Korea,
+United Kingdom (UK), New Zealand (NZ) and the United States of America
+(US). The data returns are calculated as follows:
+
+\begin{align} \label{eq:returns}
+r_{i,t} = \frac{B_{i,t}}{B_{i,t-1}} - 1
+\end{align}
+
+The weekly returns as calculated according to equation \ref{eq:returns}
+and are then log transformed, such that inferences regarding level
+changes over time can be made. To clean the data, the paper uses Boudt's
+technique. Additionally, the paper excludes the global financial crisis.
+This provides the benefit of the crisis not influencing the results
+dramatically and also allows for the evaluation of the impact of the
+crisis on volatility and co-movement in these bond markets. Tables
+\ref{tablestats} and \ref{tablestats2} show the mean returns and the
+standard deviation of the returns. These appear to be the same for most
+countries, due to the rounding of the values, which tend to show the
+values are the same. However, it must be noted that this is an early
+sign that the correlation between these countries' bond returns may be
+high. The period prior to the crisis starts in the first week of
+February and ends in the final week of December, 2009. The post-crisis
+period starts in the first week of October, 2009 and ends in the final
+week of June, 2018.
+
+\begin{longtable}{rlrr}
+  \hline
+ & Country & mean\_returns & std\_dev\_returns \\ 
+  \hline
+1 & AUS & 0.09 & 0.02 \\ 
+  2 & Canada & 0.09 & 0.02 \\ 
+  3 & Korea & 0.09 & 0.02 \\ 
+  4 & NZ & 0.09 & 0.02 \\ 
+  5 & UK & 0.09 & 0.02 \\ 
+  6 & US & 0.09 & 0.03 \\ 
+   \hline
+\hline
+\caption{Summary statistics: Bond Yields \label{tablestats}} 
+\end{longtable}
+
+\begin{longtable}{rlrr}
+  \hline
+ & Country & mean\_returns & std\_dev\_returns \\ 
+  \hline
+1 & AUS & 0.09 & 0.02 \\ 
+  2 & Canada & 0.09 & 0.02 \\ 
+  3 & Korea & 0.09 & 0.02 \\ 
+  4 & NZ & 0.09 & 0.02 \\ 
+  5 & UK & 0.09 & 0.02 \\ 
+  6 & US & 0.09 & 0.03 \\ 
+   \hline
+\hline
+\caption{Summary statistics post crisis: Bond Yields \label{tablestats2}} 
+\end{longtable}
+
+\section{\texorpdfstring{Methodology
+\label{methodology}}{Methodology }}\label{methodology}
+
+The concept of multivariate modelling involves mapping multiple
+univariate GARCH processes to the multivariate domain, whereby a series
+of n Univariate GARCH models are estimated. The paper will apply the
+Dynamic Conditional Correlation model, first proposed by R. Engle
+(\protect\hyperlink{ref-engle2002dynamic}{2002}). Essentially this is a
+two step process. Firstly, generalising the univariate GARCH processes
+to the multivariate domain. Then using this to estimate the DCC model
+which will allow for the estimation of the dynamic correlation estimates
+for each series. This section will first explain how the univariate
+GARCH processes can be generalised to the multivariate domain, followed
+by a detailed description of the DCC methodology used to obtain the
+dynamic correlation estimates.
+
+The generalization is as follows: Given the stochastic process,
+\(x_t, t=1,2,...T\) of financial returns with dimension \(N \times 1\)
+and mean vector \(\mu_t\), given the information set \(I_{t-1}\):
+
+\begin{align} \label{eq:mgarch1}
+x_t \left| I_{t - 1} \right. = \mu_t + \varepsilon_t
+\end{align}
+
+where the residuals of the process are modelled as:
+
+\begin{align} \label{eq:mgarch2}
+\varepsilon_t = H_{t}^{1/2}z_t, 
+\end{align}
+
+\(H_t^{1/2}\) above is a \(N\times N\) positive definite matrix such
+that \(\bf{H_t}\) is the conditional covariance matrix of
+\(\bf{x_t}\).\footnote{\(\bf{z_t}\) is a \(N\times 1\) i.i.d. N(0,1)
+  series}
+
+The DCC-GARCH methodology which follows, will explain how this can be
+used to map the \(H_t\) matrix into the multivariate plain.
+
+\subsection{\texorpdfstring{DCC-GARCH methodology
+\label{garch}}{DCC-GARCH methodology }}\label{dcc-garch-methodology}
+
+DCC models offer a simple and more parsimonious means of doing MV-vol
+modelling N.F. Katzke (\protect\hyperlink{ref-Texevier}{2017}). In
+particular, it relaxes the constraint of a fixed correlation structure
+assumed by the constant conditional correlation (CCC) model to allow for
+estimates of time-varying correlation. The DCC model can be defined as:
+
+\begin{equation} \label{dcc}
+H_t = D_t.R_t.D_t.
+\end{equation}
+
+Equation \ref{dcc}, shows that \(H_t\), which as mentioned above is the
+conditional covariance matrix of \(\bf{x_t}\), this splits the
+variance-covariance matrix into identical diagonal matrices and an
+estimate of the time-varying correlation \(R_T\). Estimating \(R_T\)
+requires it to be inverted at each estimated period, therefore, a proxy
+equation is used (R. Engle
+\protect\hyperlink{ref-engle2002dynamic}{2002}):
+
+\begin{align}  \label{dcc2}
+Q_{ij,t} &= \bar Q + a\left(z_{t - 1}z'_{t - 1} - \bar{Q} \right) + b\left( Q_{ij, t - 1} - \bar{Q} \right) \hfill \\ \notag
+                            &= (1 - a - b)\bar{Q} + az_{t - 1}z'_{t - 1} + b.Q_{ij, t - 1} \notag
+                            \end{align}
+
+Note the above equation is similar in form to a GARCH(1,1) process, with
+non-negative scalars \(a\) and \(b\), and with: \(Q_{ij, t}\) the
+unconditional sample variance estimate between series \(i\) and \(j\),
+and lastly \(\bar{Q}\) the unconditional matrix of standardized
+residuals from each univariate pair estimate. Using this information, we
+can now to use equation \ref{dcc2} to estimate \(R_t\) as:
+
+\begin{align}\label{eq:dcc3}
+R_t &= diag(Q_t)^{-1/2}Q_t.diag(Q_t)^{-1/2}. 
+\end{align}
+
+Which contains the bivariate elements:
+
+\begin{align}
+R_t &= \rho_{ij,t} = \frac{q_{i,j,t}}{\sqrt{q_{ii,t}.q_{jj,t}}} 
+\end{align}
+
+This process produces the DCC model used to obtain the correlation
+estimates and is formulated as:
+
+\begin{align}
+\varepsilon_t &\thicksim  N(0,D_t.R_t.D_t) \notag \\
+D_t^2 &\thicksim \text{Univariate GARCH(1,1) processes $\forall$ (i,j), i $\ne$ j} \notag \\
+z_t&=D_t^{-1}.\varepsilon_t \notag \\
+Q_t &= \bar{Q}(1-a-b)+a(z_t'z_t)+b(Q_{t-1}) \notag \\
+                        R_t &= Diag(Q_t^{-1}).Q_t.Diag({Q_t}^{-1}) \notag \\
+                        \end{align}
+
+\section{Emperical results}\label{emperical-results}
+
+The findings of the bivariate correlations between the 6 countries will
+be reported in this section. It is important to note that given the
+selection of 6 developed economies, the correlation is expected to be
+high as the financial conditions in the countries will be similar.
+Firstly, this section looks at the volatility plots of the 6 countries
+and how this changes between the period before the global financial
+crisis and the period post-crisis. This will be followed by studying
+selected bivariate correlation between the countries which display
+interesting findings, and will be compared between the two periods
+before and after the global financial crisis.
+
+\subsection{\texorpdfstring{Volatility
+\label{volatility}}{Volatility }}\label{volatility}
+
+The volatility of the bond market before the global financial crisis is
+significantly lower than after the crisis. The volatility of the returns
+in the US is the highest for a large portion of the period before the
+crisis, for as long as 2002-2005. Although it must be noted that this
+doesn't increase significantly post crisis. The UK and Canadian returns
+experience the greatest increase in volatility between the period before
+and the period after the crisis. The return on the UK bond, post-crisis,
+displays volatility of almost 6 times that of the volatility experienced
+before the crisis, peaking in the final quarter of 2016. While the
+volatility in the Canadian bond returns triples post-crisis compared to
+before the crisis. It is evident from these volatility plots that the
+correlation between the countries is high. According to Kumar and
+Okimoto (\protect\hyperlink{ref-kumar2011}{2011}), there has been a
+significant amount of uncertainty in the economy after the global
+financial crisis. This adds to the explanation of the high and increased
+volatility compared to the period before the crisis.
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure1-1} 
+
+}
+
+\caption{Volatility plot \label{lit}}\label{fig:figure1}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure2-1} 
+
+}
+
+\caption{Volatility plot post-crisis \label{lit}}\label{fig:figure2}
+\end{figure}
+
+\subsection{\texorpdfstring{Dynamic correlation
+\label{corr}}{Dynamic correlation }}\label{dynamic-correlation}
+
+The results of the Dynamic Conditional correlations show very high
+correlation in almost all cases with all pairs. Figures \ref{figure3} to
+\ref{figure8} show the correlation estimates for the period prior to the
+global financial crisis. All country pairs display correlation with each
+other of 60 percent or more, apart from with Korea. This low correlation
+of the Korean bond returns with every country is indicative in figure
+7.4, which shows that correlation with any country pair, rarely goes
+beyond 30 percent. This provides for support for the argument that
+global financial markets are becoming more integrated. Additionally, the
+highest correlation, in excess of 80 percent, is between the Australian
+and New Zealand pair and the US and Canadian pair. This supports the
+evidence provided by Barr and Priestley
+(\protect\hyperlink{ref-barr2004}{2004}), who finds high correlation
+between the US and Canadian bond markets.
+
+The Dynamic conditional correlation results do decrease by a significant
+amount in some country pairs in the period after the global financial
+crisis. However, the correlation is largely still above the 50 percent
+mark. Figures \ref{figure9} to \ref{figure14} show that almost all
+country pairs see a reduction in correlation in the post-crisis period.
+The exception is the Canada and US pair, which figure \ref{figure10}
+shows increases to almost 90 percent which provides further evidence to
+the argument made by Barr and Priestley
+(\protect\hyperlink{ref-barr2004}{2004}), and illustrates the importance
+of diversification. Moreover, the correlation between Korea and all the
+countries in the sample increases substantially in the post-crisis
+period. This reaches as high as 60 percent between the Korean and
+Australian pair. In general, the correlation between all the developed
+countries is very high and demonstrates the need for diversification.
+This can come in the form of alternative assets or even the inclusion of
+developing economies to the portfolio.
+
+\section{\texorpdfstring{Conclusion
+\label{conclusion}}{Conclusion }}\label{conclusion}
+
+In recapitulating the findings of this paper, it is evident that
+correlation amongst the 6 developed economies is very high. This is
+explained in part by the growing integration of the global financial
+markets, but also by uncertainty and similar financial market conditions
+in the countries selected. The Korean bond returns display the lowest
+correlation with all the countries in the sample, while the pairs of
+Canada and the US and the pairs of Australia and New Zealand display the
+highest correlation. The high correlation in general, demonstrates the
+need for diversification. Including other countries with different
+financial market conditions and characteristics may yield the benefit of
+diversification. Additionally, inclusion of alternative assets in the
+portfolio, may yield diversification benefits as well.
+
+It must be noted that this paper is limited in its evaluation of
+correlation amongst developed market economies, in that few countries
+are selected due to time constraints and data constraints. Future
+studies can improve on this study, by including more countries and
+applying less constraints to the DCC model.
+
+\newpage
+
+\section{\texorpdfstring{Appendix
+\label{appendix}}{Appendix }}\label{appendix}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure3-1} 
+
+}
+
+\caption{Dynanmic correlation \label{figure3}}\label{fig:figure3}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure4-1} 
+
+}
+
+\caption{Dynanmic correlation \label{figure4}}\label{fig:figure4}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure5-1} 
+
+}
+
+\caption{Dynanmic correlation \label{figure5}}\label{fig:figure5}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure6-1} 
+
+}
+
+\caption{Dynanmic correlation \label{figure6}}\label{fig:figure6}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure7-1} 
+
+}
+
+\caption{Dynanmic correlation \label{figure7}}\label{fig:figure7}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure8-1} 
+
+}
+
+\caption{Dynanmic correlation \label{figure8}}\label{fig:figure8}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure9-1} 
+
+}
+
+\caption{Dynanmic correlation \label{figure9}}\label{fig:figure9}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure10-1} 
+
+}
+
+\caption{Dynanmic correlation \label{figure10}}\label{fig:figure10}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure11-1} 
+
+}
+
+\caption{Dynanmic correlation \label{figure11}}\label{fig:figure11}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure12-1} 
+
+}
+
+\caption{Dynanmic correlation \label{figure12}}\label{fig:figure12}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure13-1} 
+
+}
+
+\caption{Dynanmic correlation \label{figure13}}\label{fig:figure13}
+\end{figure}
+
+\begin{figure}[H]
+
+{\centering \includegraphics{dian_finmetrics_project_files/figure-latex/figure14-1} 
+
+}
+
+\caption{Dynanmic correlation \label{figure14}}\label{fig:figure14}
+\end{figure}
+
+\newpage
+
+\section*{\texorpdfstring{References
+\label{references}}{References }}\label{references}
+\addcontentsline{toc}{section}{References \label{references}}
+
+\hypertarget{refs}{}
+\hypertarget{ref-barr2004}{}
+Barr, David G, and Richard Priestley. 2004. ``Expected Returns, Risk and
+the Integration of International Bond Markets.'' \emph{Journal of
+International Money and Finance} 23 (1). Elsevier: 71--97.
+
+\hypertarget{ref-cappiello2006}{}
+Cappiello, Lorenzo, Robert F Engle, and Kevin Sheppard. 2006.
+``Asymmetric Dynamics in the Correlations of Global Equity and Bond
+Returns.'' \emph{Journal of Financial Econometrics} 4 (4). Oxford
+University Press: 537--72.
+
+\hypertarget{ref-davies2007}{}
+Davies, Andrew. 2007. ``International Bond Market Cointegration Using
+Regime Switching Techniques.'' \emph{The Journal of Fixed Income} 16
+(4). Euromoney Institutional Investor PLC: 69.
+
+\hypertarget{ref-engle2002dynamic}{}
+Engle, Robert. 2002. ``Dynamic Conditional Correlation: A Simple Class
+of Multivariate Generalized Autoregressive Conditional
+Heteroskedasticity Models.'' \emph{Journal of Business \& Economic
+Statistics} 20 (3). Taylor \& Francis: 339--50.
+
+\hypertarget{ref-FRENCH}{}
+Fama, Eugene F, and Kenneth R French. 1989. ``Business Conditions and
+Expected Returns on Stocks and Bonds.'' \emph{Journal of Financial
+Economics} 25 (1). Elsevier: 23--49.
+
+\hypertarget{ref-Texevier}{}
+Katzke, N.F. 2017. \emph{Texevier: Package to Create Elsevier Templates
+for Rmarkdown}. Stellenbosch, South Africa: Bureau for Economic
+Research.
+
+\hypertarget{ref-katzke2013}{}
+Katzke, Nico. 2013. ``South African Sector Return Correlations: Using
+Dcc and Adcc Multivariate Garch Techniques to Uncover the Underlying
+Dynamics.'' \emph{South African Sector Return Correlations: Using DCC
+and ADCC Multivariate GARCH Techniques to Uncover the Underlying
+Dynamics}.
+
+\hypertarget{ref-kumar2011}{}
+Kumar, Manmohan S, and Tatsuyoshi Okimoto. 2011. ``Dynamics of
+International Integration of Government Securities' Markets.''
+\emph{Journal of Banking \& Finance} 35 (1). Elsevier: 142--54.
+
+\hypertarget{ref-lucey2006}{}
+Lucey, Brian M, and James Steeley. 2006. ``Measuring and Assessing the
+Effects and Extent of International Bond Market Integration.''
+\emph{Journal of International Financial Markets, Institutions and
+Money} 16 (1). Elsevier: 1--3.
+
+% Force include bibliography in my chosen format:
+
+\bibliographystyle{Tex/Texevier}
+\bibliography{Tex/ref}
+
+
+
+
+
+\end{document}
