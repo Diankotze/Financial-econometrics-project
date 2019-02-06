@@ -11,7 +11,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 #Purpose
-This README is to detail how I went about the coding part of the project. THis is largely for myself to look at in the future, so that I know how I went about doing it. The complete project is in the PDF file, which contains the write up as well as all the graphs and tables. While some of my comments may seem unnecessary, it helps to guide me in my thinking.
+This README is to detail how I went about the coding part of the project. This is largely for myself to look at in the future, so that I know how I went about doing it. The complete project is in the PDF file, which contains the write up as well as all the graphs and tables. While some of my comments may seem unnecessary, it helps to guide me in my thinking.
 
 
 First lets load the data and required packages
@@ -46,63 +46,78 @@ data.bonds <- data.bonds %>%
 ```
 
 Now I need to divide the sample into 2 periods(pre and post crisis) and clean the data
+
 ```{r subsamples}
-############
+
 # Pre-crisis
-############
+
 sample_pre_start <- ymd(20010207)
 sample_pre_end <- ymd(20071226)
 
 data_pre <-   
   data.bonds %>% filter(date >= sample_pre_start & date<= sample_pre_end)
-#############
+#----------------------------------------------------------------------------
 # Post-crisis
-#############
+
 sample_post_start <- ymd(20091007)
 sample_post_end <- ymd(20180627)
 
 data_post <-   
   data.bonds %>% filter(date >= sample_post_start & date<= sample_post_end) 
 
-#making data wide for cleaning below
+# making data wide for cleaning below
 
 wide_pre <- spread(data_pre, Country,Weekly_Returns)
 colnames(wide_pre) <- colnames(wide_pre) %>% gsub("_10Yr","",.) 
 wide_pre <- tbl_xts(wide_pre[, 1:length(wide_pre[1,]), drop = FALSE])
-#### Now that it is wide, I can apply boudt's cleaning technique
+
+# Now that it is wide, I can apply boudt's cleaning technique
+
 clean_pre <- Return.clean(wide_pre, method = "boudt", alpha = 0.01)
-#### An alternative way to log the data(Class mate showed me how to do this)
+
+# An alternative way to log the data(Class mate showed me how to do this)
+
 clean_pre <- log(clean_pre + (1-min(clean_pre)))
 
 wide_post <- spread(data_post, Country,Weekly_Returns)
 colnames(wide_post) <- colnames(wide_post) %>% gsub("_10Yr","",.) 
 wide_post <- tbl_xts(wide_post[, 1:length(wide_post[1,]), drop = FALSE])
 
-#### Now that it is wide, I can apply boudt's cleaning technique
+# Now that it is wide, I can apply boudt's cleaning technique
+
 clean_post <- Return.clean(wide_post, method = "boudt", alpha = 0.01)
 
-#### An alternative way to log the data(Class mate showed me how to do this)
+# An alternative way to log the data(Class mate showed me how to do this)
+
 clean_post <- log(clean_post + (1-min(clean_post)))
 
 ```
+
 Getting data in tidy format again in order to graph the log returns
+
 ```{r tidy}
-#### PRE
+
+# Pre-crisis
+
 data_pre <- 
   clean_pre %>% 
   xts_tbl() %>% 
   gather(Country, Weekly_Returns, -date) %>%
   arrange(date)
-### Post
+
+# Post-crisis
 data_post <- 
   clean_post %>% 
   xts_tbl() %>% 
   gather(Country, Weekly_Returns, -date) %>%
   arrange(date) 
 ```
+
 Next I obtain the summary stats for the pre-crisis and post-crisis periods
+
 ```{r sumstats}
-#First pre-crisis
+# First pre-crisis
+
 sum_stat_table <- data_pre %>% 
   ungroup() %>% group_by(Country) %>% 
   summarise(mean_returns = mean(Weekly_Returns), std_dev_returns = sd(Weekly_Returns))
@@ -113,9 +128,11 @@ sum_stat_table_post <- data_post %>%
   ungroup() %>% group_by(Country) %>% 
   summarise(mean_returns = mean(Weekly_Returns), std_dev_returns = sd(Weekly_Returns))
 ```
+
 The next step is to estimate the GARCH model so that we can use it for the DCC estimates.
 
 First lets load the required packages in again
+
 ```{r Package reload}
 #loading the required packages again
 
@@ -123,12 +140,13 @@ library(rmsfuns)
 load_pkg("MTS")
 load_pkg(c("devtools", "rugarch", "forecast", "tidyr", "tbl2xts", "lubridate", "readr", "PerformanceAnalytics"))
 ```
-Now let's tuck in
-```{r GARCH estimation}
-###################################################################################################
-############## Estimating the GARCH models for the DCC which will follow ########################## ###################################################################################################
 
-###################################################################################################
+Now let's tuck in
+
+```{r GARCH estimation}
+
+############## Estimating the GARCH models for the DCC which will follow ########################## 
+
 ###################       Pre-crisis          #####################################################
 
 # First the data is spread to get it in wide format
@@ -152,13 +170,14 @@ RTN_pre <- Return.clean(RTN_pre, method = c("none", "boudt", "geltner")[2], alph
 DCCPre_pre <- dccPre(RTN_pre, include.mean = T, p = 0)
 
 # Then, for every series, a standard univariate GARCH(1,1) is run which gives us et and sigmat
-# These values are then used to calculate the standardized residuals, zt, which is used in the DCC later on
+# These values are then used to calculate the standardized residuals, zt, which is used in the DCC
 
 names(DCCPre_pre)
 
 # Now that I have the estimates of volatility for each of the series, lets graph this.
 
 # Changing the  format to one that that is usable(usable xts)
+
 Vol_pre <- DCCPre_pre$marVol
 colnames(Vol_pre) <- colnames(RTN_pre)
 
@@ -171,18 +190,18 @@ Vol_pre <-
 TidyVol_pre <- Vol_pre %>% gather(Country, Sigma, -date)
 
 ```
-Then to plot the pre-crisis volatility
+
+Then to plot the pre-crisis volatility(sigma)
+
 ```{r pre-volatility plot}
-# Now the volatility(sigma) of each of the countries is graphed in one single plot
+
 ggplot(TidyVol_pre) + geom_line(aes(x = date, y = Sigma, colour = Country))
-
-#Stoked! 
-
 
 ```
 
+Now I need to save the standardized residuals so that it can be used for the DCC
+
 ```{r pre-pairs}
-# Now I need to save the standardized residuals so that it can be used for the DCC
 
 StdRes_pre <- DCCPre_pre$sresi
 
@@ -200,61 +219,64 @@ DCC_pre <- dccFit(StdRes_pre, type="Engle") #This takes a while
 
 load_pkg(c("tidyr","dplyr", "tbl2xts"))
 library(rmsfuns)
-#           DCC Model is estimated! what a feeling!
-##########################################################################################
+#------------------------------------------------------------------------------------------------
 
 #From the equations above, we know that we can now calculate the bivariate correlation between all the pairs in the data set
 
 Rhot_pre <- DCC_pre$rho.t
-#######################################################################################
-# Right, so it gives us all the columns together in the form:
-# X1,X1 ; X1,X2 ; X1,X3 ; ....
-#This gives 30 pairs from the 6 series(Countries)
 
-
+# Right, so it gives us all the columns together in the form: X1,X1 ; X1,X2 ; X1,X3 ; ....
 ```
+
 Now repeating this for the period post-crisis
+
 ```{r post-crisis}
-##################   Now I repeat this for the period post-crisis   ###################
-#######################################################################################
-####################          Post-crisis      ########################################
 
 RTN_post <- data_post %>% spread(Country, Weekly_Returns) %>% tbl_xts()
 
 
 RTN_post <- RTN_post[-1,]
+
 # Center the data:
+
 RTN_post <- scale(RTN_post,center=T,scale=F)
 
 # Now use code to clean the data using Boudt's technique: removing large spikes in the data
+
 RTN_post <- Return.clean(RTN_post, method = c("none", "boudt", "geltner")[2], alpha = 0.01)
 
 # DCCPre
+
 DCCPre_post <- dccPre(RTN_post, include.mean = T, p = 0)
 names(DCCPre_post)
 
 # Change to format that is usable---usable xts
+
 Vol_post <- DCCPre_post$marVol
 colnames(Vol_post) <- colnames(RTN_post)
 
 # Volatility
+
 Vol_post <- 
   data.frame( cbind( date = as.Date(index(RTN_post)), Vol_post)) %>% # # Adding date column back in.
   mutate(date = as.Date(date)) %>% tbl_df() # make date column a date column haha
 
 # Tidy format so that I am able to plot the volatility(sigma) of each of the countries
-TidyVol_post <- Vol_post %>% gather(Country, Sigma, -date)
 
+TidyVol_post <- Vol_post %>% gather(Country, Sigma, -date)
 ```
-and... plotting the post-crisis volatility
+
+and... plotting the post-crisis volatility(sigma)
+
 ```{r post-crisis volatility}
-# Now the volatility(sigma) of each of the countries is graphed in one single plot
+
 ggplot(TidyVol_post) + geom_line(aes(x = date, y = Sigma, colour = Country))
 
 ```
 
+Now I need to save the standardized residuals so that it can be used for the DCC
+
 ```{r post-pairs}
-# Now I need to save the standardized residuals so that it can be used for the DCC
 
 StdRes_post <- DCCPre_post$sresi
 
@@ -271,25 +293,19 @@ DCC_post <- dccFit(StdRes_post, type="Engle")
 # now load it back in again!
 
 load_pkg(c("tidyr","dplyr", "tbl2xts"))
-
-#           DCC Model is estimated! what a feeling!
-##########################################################################################
+#---------------------------------------------------------------------------------------------------
 
 #From the equations above, we know that we can now calculate the bivariate correlation between all the pairs in the data set
 
 Rhot_post <- DCC_post$rho.t
-#######################################################################################
-# Right, so it gives us all the columns together in the form:
-# X1,X1 ; X1,X2 ; X1,X3 ; ....
-#This gives 30 pairs from the 6 series(Countries)
+
+# Right, so it gives us all the columns together in the form: X1,X1 ; X1,X2 ; X1,X3 ; ....
 ```
 
 From here, all the columns do not have names. So I need to create a function which provides the required names for all the columns.
 
 ```{r renaming function}
-############################################################
-##### Function to rename column names of the DCC ###########
-############################################################
+
 # I want to give each column names which are shortened, making graphing and everything else easier.
 
 renamingdcc <- function(ReturnSeries, DCC.TV.Cor){ 
@@ -300,6 +316,7 @@ renamingdcc <- function(ReturnSeries, DCC.TV.Cor){
   xx <- mapply(rep, times = ncolrtn:1, x = namesrtn)
   
 # Now we have this function we need to save the names which correspond to each of the cloumns 
+  
   nam <- c()
   for (j in 1:(ncolrtn)) {
     for (i in 1:(ncolrtn)) {
@@ -307,21 +324,27 @@ renamingdcc <- function(ReturnSeries, DCC.TV.Cor){
     }}
   
   colnames(DCC.TV.Cor) <- nam
+  
 #Now in order to plot all the correlations and the respective pairs, lets first get the date back..
 #Appending the date column that has was removed again. Bit repetitive but has to be done.
+  
   DCC.TV.Cor <-
-    data.frame( cbind( date = as.Date(index(ReturnSeries)), DCC.TV.Cor)) %>% # Add date column which dropped mutate(date = as.Date(date)) %>% tbl_df()
+    data.frame( cbind( date = as.Date(index(ReturnSeries)), DCC.TV.Cor)) %>%
     mutate(date = as.Date(date)) %>% tbl_df()
     DCC.TV.Cor <- DCC.TV.Cor %>% gather(Pairs, Rho, -date)
   DCC.TV.Cor
 }
 
 # Now we can see if this function that was created, will work. 
+
 Rhot_pre <-
   renamingdcc(ReturnSeries = RTN_pre, DCC.TV.Cor = Rhot_pre)
 ```
+
 Finally, I can plot the Dynamic conditional correlations of all the country pairs
+
 ```{r pre-crisis correlation}
+
 # Dynamic Conditional Correlations Pre-crisis
 
 AUS <-
@@ -366,9 +389,10 @@ US <-
   ggtitle("Dynamic Conditional Correlations pre-crisis: US")
 
 ```
+
 AND Post-crisis
+
 ```{r post-crisis correlation}
-# Dynamic Conditional Correlations Post-crisis
 
 # Making sure the function works
 Rhot_post <-
@@ -417,4 +441,5 @@ US_post <-
 
 
 ```
+
 This concludes an epic journey. STOKED!

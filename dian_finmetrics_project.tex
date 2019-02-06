@@ -145,7 +145,7 @@
 \begin{frontmatter}  %
 
 \title{Correlation between bond returns' in developed economies: Evidence from
-6 developed countries}
+6 developed countries.}
 
 % Set to FALSE if wanting to remove title (for submission)
 
@@ -231,19 +231,18 @@ less diversification potential. Therefore, it is important to identify
 the correlation between the bonds returns, in order to generate a
 portfolio which could potentially provide good returns while minimising
 downside risk. Ideally, correlation between the assets should be
-realtively low. This enables spreading of risk of the portfolio. The
+relatively low. This enables spreading of risk of the portfolio. The
 main focus, however, is the correlation of the bond markets,
 particularly developed economies' bond returns. The correlation between
 developed economies' bond returns is expected to be high, given the
-global intergration of the financial markets and similar financial
-market conditions (Nico Katzke
-\protect\hyperlink{ref-katzke2013}{2013}). The paper will investigate
-and add inights to correlation amongst developed economies' bond
-markets.
+global integration of the financial markets and similar financial market
+conditions (Nico Katzke \protect\hyperlink{ref-katzke2013}{2013}). The
+paper will investigate and add insights to correlation amongst developed
+economies' bond markets.
 
 This paper aims to study the correlation between the weekly returns of
 the 6 countries' 10-year bonds. Studying the periods before and after
-the global financial crisis will enable comaparison across periods to
+the global financial crisis will enable comparison across periods to
 identify effects and changes. This will also demonstrate the need for
 diversification in a portfolio, which can reduce the risk of losses. The
 paper will begin with a brief introduction to bonds and correlation in
@@ -274,9 +273,9 @@ requires two broad strategies. Firstly, to invest in different asset
 classes which have little to negative correlation. Secondly, investing
 in the same or similar asset markets, while diversifying through
 investing in multiple international markets. This paper only considers
-the second stratgey, and is secondary to the main objective of
-identyfing correlation between the developed economies bond returns. Now
-that a brief understanding of what bonds are and the use of
+the second strategy and is secondary to the main objective of
+identifying correlation between the developed economies bond returns.
+Now that a brief understanding of what bonds are and the use of
 diversification, lets gain an understanding of the correlation between
 bond markets in developed economies.
 
@@ -290,7 +289,7 @@ actions (Kumar and Okimoto \protect\hyperlink{ref-kumar2011}{2011}).
 Barr and Priestley (\protect\hyperlink{ref-barr2004}{2004}) finds
 evidence of high correlation between the Canadian and US bond markets
 and also finds correlation (although to a lesser degree) between the US
-and UK bond markets. Moroever, Davies
+and UK bond markets. Moreover, Davies
 (\protect\hyperlink{ref-davies2007}{2007}) notes in a study including 6
 bond markets, that the US, UK and Canadian bond markets share a common
 trend, subject to structural change. Davies
@@ -306,11 +305,10 @@ correlation amongst developed countries.
 This study aims to provide additional insights to the literature
 regarding the correlation of the bond market, specifically that of
 developed economies. While methods such as ADCC, and EWMA to name just
-two of a number of models that can be used to model the conditional
+two of several models that can be used to model the conditional
 time-varying variance-covariance are available, this paper, due to time
 constraints will only discuss the DCC-GARCH methodology. This will be
-used to briefly note whether this would be a good portfolio for an
-investor to hold and demonstrate the need for diversification.
+used to briefly note the need for diversification.
 
 \section{\texorpdfstring{Data \label{data}}{Data }}\label{data}
 
@@ -337,20 +335,22 @@ countries, due to the rounding of the values, which tend to show the
 values are the same. However, it must be noted that this is an early
 sign that the correlation between these countries' bond returns may be
 high. The period prior to the crisis starts in the first week of
-February and ends in the final week of December, 2009. The post-crisis
-period starts in the first week of October, 2009 and ends in the final
-week of June, 2018.
+February and ends in the final week of December 2009. The post-crisis
+period starts in the first week of October 2009 and ends in the final
+week of June 2018.\footnote{Tables \ref{tablestats} and
+  \ref{tablestats2} include 4 decimal places to illustrate that the
+  means and standard deviations differ by country.}
 
 \begin{longtable}{rlrr}
   \hline
  & Country & mean\_returns & std\_dev\_returns \\ 
   \hline
-1 & AUS & 0.09 & 0.02 \\ 
-  2 & Canada & 0.09 & 0.02 \\ 
-  3 & Korea & 0.09 & 0.02 \\ 
-  4 & NZ & 0.09 & 0.02 \\ 
-  5 & UK & 0.09 & 0.02 \\ 
-  6 & US & 0.09 & 0.03 \\ 
+1 & AUS & 0.0906 & 0.0206 \\ 
+  2 & Canada & 0.0895 & 0.0188 \\ 
+  3 & Korea & 0.0900 & 0.0229 \\ 
+  4 & NZ & 0.0903 & 0.0162 \\ 
+  5 & UK & 0.0900 & 0.0178 \\ 
+  6 & US & 0.0896 & 0.0258 \\ 
    \hline
 \hline
 \caption{Summary statistics: Bond Yields \label{tablestats}} 
@@ -360,12 +360,12 @@ week of June, 2018.
   \hline
  & Country & mean\_returns & std\_dev\_returns \\ 
   \hline
-1 & AUS & 0.09 & 0.02 \\ 
-  2 & Canada & 0.09 & 0.02 \\ 
-  3 & Korea & 0.09 & 0.02 \\ 
-  4 & NZ & 0.09 & 0.02 \\ 
-  5 & UK & 0.09 & 0.02 \\ 
-  6 & US & 0.09 & 0.03 \\ 
+1 & AUS & 0.0906 & 0.0206 \\ 
+  2 & Canada & 0.0895 & 0.0188 \\ 
+  3 & Korea & 0.0900 & 0.0229 \\ 
+  4 & NZ & 0.0903 & 0.0162 \\ 
+  5 & UK & 0.0900 & 0.0178 \\ 
+  6 & US & 0.0896 & 0.0258 \\ 
    \hline
 \hline
 \caption{Summary statistics post crisis: Bond Yields \label{tablestats2}} 
@@ -379,7 +379,7 @@ univariate GARCH processes to the multivariate domain, whereby a series
 of n Univariate GARCH models are estimated. The paper will apply the
 Dynamic Conditional Correlation model, first proposed by R. Engle
 (\protect\hyperlink{ref-engle2002dynamic}{2002}). Essentially this is a
-two step process. Firstly, generalising the univariate GARCH processes
+two-step process. Firstly, generalising the univariate GARCH processes
 to the multivariate domain. Then using this to estimate the DCC model
 which will allow for the estimation of the dynamic correlation estimates
 for each series. This section will first explain how the univariate
@@ -540,7 +540,7 @@ country pairs see a reduction in correlation in the post-crisis period.
 The exception is the Canada and US pair, which figure \ref{figure10}
 shows increases to almost 90 percent which provides further evidence to
 the argument made by Barr and Priestley
-(\protect\hyperlink{ref-barr2004}{2004}), and illustrates the importance
+(\protect\hyperlink{ref-barr2004}{2004}) and illustrates the importance
 of diversification. Moreover, the correlation between Korea and all the
 countries in the sample increases substantially in the post-crisis
 period. This reaches as high as 60 percent between the Korean and
@@ -548,6 +548,21 @@ Australian pair. In general, the correlation between all the developed
 countries is very high and demonstrates the need for diversification.
 This can come in the form of alternative assets or even the inclusion of
 developing economies to the portfolio.
+
+On average, the bivariate correlation between the country pairs do
+increase between the pre-crisis and post-crisis periods. Whilst
+individual changes may have been large/small as mentioned above, the
+correlation in general, shows a moderate increase between the two
+periods. The only exception is that of Korea. The bivariate correlation
+between Korea and the other 5 countries, prior to the crisis, increases
+by approximately 20-25 percent in the post-crisis period. However, these
+aggregate change interpretations are done merely by looking at the
+correlation before and after the crisis. Aggregating the data for the
+pre-crisis and post-crisis periods will yield more reliable
+interpretations but will not be done in this paper due to time
+constraints.
+
+\newpage
 
 \section{\texorpdfstring{Conclusion
 \label{conclusion}}{Conclusion }}\label{conclusion}
